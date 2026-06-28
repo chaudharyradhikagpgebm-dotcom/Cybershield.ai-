@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberShield AI — Ultimate Security Platform</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+
+/* =========================================
+   ROOT COLORS — LIGHT PURPLE THEME
+   ========================================= */
+:root {
+  --bg:        #e8e0f5;
+  --bg2:       #f0eaf8;
+  --surface:   #ffffff;
+  --surface2:  #f5f0fc;
+  --purple:    #7b2fff;
+  --purple2:   #9b59f5;
+  --purple3:   #c9a8ff;
+  --accent:    #5b0fcb;
+  --cyan:      #00b4d8;
+  --green:     #06c96a;
+  --orange:    #f59e0b;
+  --red:       #ef4444;
+  --text:      #1e0a3c;
+  --text2:     #5a3a8a;
+  --muted:     #9b7cc0;
+  --border:    rgba(123,47,255,0.18);
+  --shadow:    0 4px 24px rgba(123,47,255,0.13);
+  --card-glow: 0 0 0 1px rgba(123,47,255,0.1), 0 4px 20px rgba(123,47,255,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ddd0f5 0%, #ede5ff 40%, #d8cff0 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+#topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #3d0099, #6a0dad, #9b30ff);
+  padding: 14px 26px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 20px rgba(100,0,200,0.35);
+}
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 16px rgba(255,255,255,0.5);
+}
+.logo span { color: #c9a8ff; }
+#topRight { display: flex; gap: 16px; align-items: center; }
+#onlineDot { color: #6dffb0; font-size: 13px; font-weight: 700; }
+#clock { color: #e0d0ff; font-size: 13px; }
+
+/* =========================================
+   NAV TABS
+   ========================================= */
+#navtabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid rgba(123,47,255,0.15);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#navtabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab:hover { background: var(--surface2); color: var(--purple); }
+.tab.on {
+  background: linear-gradient(135deg, #7b2fff, #9b59f5);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 3px 12px rgba(123,47,255,0.4);
+}
+
+/* =========================================
+   PANELS
+   ========================================= */
+.panel { display: none; padding: 24px; max-width: 1080px; margin: 0 auto; }
+.panel.on { display: block; }
+
+/* =========================================
+   CARDS
+   ========================================= */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: var(--card-glow);
+}
+.card h3 {
+  color: var(--purple);
+  font-size: 15px;
+  margin-bottom: 14px;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* GRID */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media(max-width:660px) { .g2 { grid-template-columns: 1fr; } }
+
+/* =========================================
+   FORM ELEMENTS
+   ========================================= */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  outline: none;
+  margin-top: 8px;
+  transition: border 0.2s;
+}
+input:focus, textarea:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(123,47,255,0.1);
+}
+textarea { resize: vertical; min-height: 100px; }
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #7b2fff, #9b59f5);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s;
+  box-shadow: 0 3px 10px rgba(123,47,255,0.3);
+}
+.btn:hover {
+  background: linear-gradient(135deg, #6a20ee, #8840e0);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(123,47,255,0.4);
+}
+.btn2 {
+  background: transparent;
+  color: var(--purple);
+  border: 1.5px solid var(--purple);
+  box-shadow: none;
+}
+.btn2:hover { background: rgba(123,47,255,0.08); transform: none; }
+.btncyan {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+  box-shadow: 0 3px 10px rgba(0,180,216,0.3);
+}
+.btncyan:hover { background: linear-gradient(135deg, #0096c7, #005f8e); }
+
+/* =========================================
+   PROGRESS BARS
+   ========================================= */
+.barwrap {
+  width: 100%;
+  height: 12px;
+  background: var(--surface2);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+}
+.barfill {
+  height: 100%;
+  border-radius: 20px;
+  width: 0%;
+  background: var(--green);
+  transition: width 1s ease, background 0.5s;
+}
+
+/* =========================================
+   RESULT BLOCK
+   ========================================= */
+.resultbox {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border-radius: 10px;
+  border-left: 4px solid var(--purple);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* =========================================
+   COLOR LABELS
+   ========================================= */
+.cgreen  { color: #059669; }
+.corange { color: #d97706; }
+.cred    { color: #dc2626; }
+.cpurple { color: var(--purple); }
+.ccyan   { color: var(--cyan); }
+
+/* =========================================
+   STATS ROW
+   ========================================= */
+.statsrow { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.statbox {
+  flex: 1;
+  min-width: 90px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.statnum { font-size: 26px; font-weight: 900; color: var(--purple); }
+.statlbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* =========================================
+   THREAT FEED
+   ========================================= */
+.titem {
+  padding: 9px 12px;
+  background: var(--surface2);
+  border-left: 3px solid var(--red);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  margin: 5px 0;
+  color: var(--text);
+  animation: fslide 0.4s ease;
+}
+.titem.warn { border-color: var(--orange); }
+.titem.safe { border-color: var(--green); }
+@keyframes fslide {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* =========================================
+   ATTACK MAP
+   ========================================= */
+#mapGrid {
+  display: grid;
+  grid-template-columns: repeat(20,1fr);
+  gap: 3px;
+  margin-top: 10px;
+}
+.mcell {
+  aspect-ratio: 1;
+  background: #e8e0f5;
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.mcell.hot  { background: var(--red);    box-shadow: 0 0 4px var(--red); }
+.mcell.warm { background: var(--orange); }
+
+/* =========================================
+   AI CHAT
+   ========================================= */
+#aiChatBox {
+  height: 250px;
+  overflow-y: auto;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+}
+#aiChatBox::-webkit-scrollbar { width: 5px; }
+#aiChatBox::-webkit-scrollbar-thumb { background: var(--purple3); border-radius: 4px; }
+
+.myMsg {
+  color: var(--purple);
+  margin: 6px 0 2px;
+  font-weight: 700;
+}
+.aiMsg {
+  color: var(--text);
+  margin: 2px 0 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--purple3);
+  line-height: 1.6;
+}
+.typing { color: var(--muted); font-style: italic; }
+
+/* =========================================
+   PASSWORD CRITERIA
+   ========================================= */
+.critlist { list-style: none; margin-top: 10px; font-size: 13px; }
+.critlist li { padding: 3px 0; color: var(--text2); }
+.critlist li.ok::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.critlist li.no::before { content: "✗ "; color: var(--red); font-weight: 700; }
+
+/* =========================================
+   GENERATED PASSWORD BOX
+   ========================================= */
+#genPwBox {
+  background: linear-gradient(135deg, #f5f0fc, #ece4ff);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple);
+  margin-top: 10px;
+  word-break: break-all;
+  letter-spacing: 1.5px;
+  min-height: 48px;
+}
+
+/* =========================================
+   GAME
+   ========================================= */
+.goptions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.gbtn {
+  flex: 1;
+  min-width: 110px;
+  padding: 12px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.gbtn:hover { border-color: var(--purple); color: var(--purple); background: rgba(123,47,255,0.05); }
+.gbtn.correct {
+  border-color: var(--green) !important;
+  background: rgba(6,201,106,0.1) !important;
+  color: #059669 !important;
+}
+.gbtn.wrong {
+  border-color: var(--red) !important;
+  background: rgba(239,68,68,0.1) !important;
+  color: #dc2626 !important;
+}
+.gbtn:disabled { cursor: not-allowed; opacity: 0.8; }
+
+#gameTimer {
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--purple);
+}
+
+.lbrow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border-radius: 8px;
+  margin: 4px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* =========================================
+   BADGES
+   ========================================= */
+.bdg {
+  display: inline-block;
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 3px;
+  border: 1.5px solid;
+}
+.bdg-g { border-color: var(--green);  color: #059669; background: rgba(6,201,106,0.08); }
+.bdg-b { border-color: var(--cyan);   color: var(--cyan); background: rgba(0,180,216,0.08); }
+.bdg-o { border-color: var(--orange); color: #d97706; background: rgba(245,158,11,0.08); }
+.bdg-r { border-color: var(--red);    color: #dc2626; background: rgba(239,68,68,0.08); }
+.bdg-p { border-color: var(--purple); color: var(--purple); background: rgba(123,47,255,0.08); }
+
+/* =========================================
+   QUICK BUTTONS (AI)
+   ========================================= */
+.quickrow { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.qbtn {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(123,47,255,0.07);
+  border: 1.5px solid var(--purple3);
+  border-radius: 20px;
+  color: var(--purple);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.qbtn:hover { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+/* =========================================
+   DIVIDER
+   ========================================= */
+.divider {
+  border: none;
+  border-top: 1.5px solid var(--border);
+  margin: 14px 0;
+}
+
+/* =========================================
+   SECTION LABEL
+   ========================================= */
+.slabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 8px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<div id="topbar">
+  <div class="logo">CYBER<span>SHIELD</span> AI</div>
+  <div id="topRight">
+    <span id="onlineDot">● ONLINE</span>
+    <span id="clock">00:00:00</span>
+  </div>
+</div>
+
+<!-- ===================== TABS ===================== -->
+<div id="navtabs">
+  <button class="tab on"  onclick="goTab('leak',this)">🛡️ Leak Checker</button>
+  <button class="tab"     onclick="goTab('risk',this)">⚠️ Risk Engine</button>
+  <button class="tab"     onclick="goTab('pass',this)">🔐 Password</button>
+  <button class="tab"     onclick="goTab('phish',this)">🔍 Phish Detector</button>
+  <button class="tab"     onclick="goTab('threat',this)">🌐 Threat Feed</button>
+  <button class="tab"     onclick="goTab('ai',this)">🤖 AI Assistant</button>
+  <button class="tab"     onclick="goTab('game',this)">🎮 Cyber Game</button>
+</div>
+
+
+<!-- ============================================================
+     PANEL 1 — DATA LEAK CHECKER
+     ============================================================ -->
+<div class="panel on" id="p-leak">
+
+  <div class="card">
+    <h3>🛡️ Dark Web Email Leak Scanner</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">
+      Enter your email address to check against simulated dark web breach databases.
+    </p>
+    <input type="email" id="leakEmail" placeholder="yourname@email.com">
+    <br>
+    <button class="btn" onclick="doLeakScan()">▶ Scan Now</button>
+    <span id="leakLoader" style="display:none;margin-left:12px;font-size:13px;color:var(--purple);">
+      🔍 Scanning dark web sources…
+    </span>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <h3>📊 Risk Score</h3>
+      <div class="barwrap"><div class="barfill" id="leakBar"></div></div>
+      <div id="leakScore" style="font-size:20px;font-weight:800;margin-top:8px;color:var(--muted);">
+        Not scanned yet
+      </div>
+    </div>
+    <div class="card">
+      <h3>📋 Breach Report</h3>
+      <div id="leakReport" style="font-size:14px;color:var(--muted);line-height:1.7;">
+        Run a scan to see breach data.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>💡 Security Recommendations</h3>
+    <div id="leakAdvice" style="font-size:14px;color:var(--muted);line-height:2.0;">
+      Scan your email to get personalised security recommendations.
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PANEL 2 — RISK ENGINE
+     ============================================================ -->
+<div class="panel" id="p-risk">
+
+  <div class="card">
+    <h3>⚠️ Cyber Risk Engine PRO</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">
+      Analyse an email address, IP address, or username for threat patterns.
+    </p>
+    <input type="text" id="riskInput" placeholder="e.g.  admin@company.com  or  192.168.1.1  or  username123">
+    <br>
+    <button class="btn" onclick="doRiskCheck()" style="margin-right:8px;">▶ Analyze Risk</button>
+    <button class="btn btn2" onclick="clearRisk()">✕ Clear</button>
+  </div>
+
+  <div class="card">
+    <h3>📊 Risk Assessment</h3>
+    <div class="barwrap"><div class="barfill" id="riskBar"></div></div>
+    <div id="riskStatus" style="font-size:22px;font-weight:800;margin:8px 0;color:var(--muted);">
+      Awaiting input…
+    </div>
+    <div id="riskReport" style="font-size:13px;color:var(--text2);"></div>
+  </div>
+
+  <div class="card">
+    <h3>🔎 Risk Factors Detected</h3>
+    <div id="riskFactors" style="font-size:13px;color:var(--muted);">No analysis run yet.</div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PANEL 3 — PASSWORD ANALYZER
+     ============================================================ -->
+<div class="panel" id="p-pass">
+
+  <div class="g2">
+
+    <div class="card">
+      <h3>🔐 Password Strength Analyzer</h3>
+      <input type="password" id="pwInput" placeholder="Type your password here…" oninput="doPassCheck()">
+      <div class="barwrap"><div class="barfill" id="pwBar"></div></div>
+      <div id="pwStrength" style="font-size:20px;font-weight:800;margin:8px 0;color:var(--muted);">—</div>
+      <div id="pwEntropy"  style="font-size:13px;color:var(--text2);"></div>
+      <div id="pwCrack"    style="font-size:13px;color:var(--text2);margin-top:4px;"></div>
+      <hr class="divider">
+      <div class="slabel">Criteria Checklist</div>
+      <ul class="critlist" id="pwCritList"></ul>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>🔑 Password Generator</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn"  onclick="doGenPw()">Generate</button>
+          <button class="btn btn2" onclick="copyGenPw()">📋 Copy</button>
+        </div>
+        <div id="genPwBox">Click Generate to create a strong 16-character password</div>
+      </div>
+
+      <div class="card" style="margin-top:0;">
+        <h3>🛡️ Breach Check</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">
+          Check if your typed password has appeared in known breaches.
+        </p>
+        <button class="btn btncyan" onclick="doBreachCheck()">Check Safety</button>
+        <div id="breachResult" style="display:none;" class="resultbox"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PANEL 4 — PHISH DETECTOR
+     ============================================================ -->
+<div class="panel" id="p-phish">
+
+  <div class="g2">
+
+    <div class="card">
+      <h3>🔍 URL Scanner</h3>
+      <input type="text" id="urlInput" placeholder="https://example.com/login/verify">
+      <br>
+      <button class="btn" onclick="doScanURL()">Scan URL</button>
+      <div id="urlResult" style="display:none;" class="resultbox"></div>
+    </div>
+
+    <div class="card">
+      <h3>📧 Phishing Email Analyzer</h3>
+      <textarea id="emailBody" placeholder="Paste the suspicious email content here…"></textarea>
+      <button class="btn" onclick="doScanEmail()">Analyze Email</button>
+      <div id="emailResult" style="display:none;" class="resultbox"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>📊 Combined Threat Meter</h3>
+    <div class="barwrap"><div class="barfill" id="phishBar"></div></div>
+    <div id="phishMeter" style="font-size:17px;font-weight:800;margin-top:6px;color:var(--muted);">
+      No scan run yet
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PANEL 5 — THREAT FEED
+     ============================================================ -->
+<div class="panel" id="p-threat">
+
+  <div class="statsrow">
+    <div class="statbox">
+      <div class="statnum" id="sThreat">0</div>
+      <div class="statlbl">Threats</div>
+    </div>
+    <div class="statbox">
+      <div class="statnum" id="sBlocked">0</div>
+      <div class="statlbl">Blocked</div>
+    </div>
+    <div class="statbox">
+      <div class="statnum">14</div>
+      <div class="statlbl">Countries</div>
+    </div>
+    <div class="statbox">
+      <div class="statnum cred">HIGH</div>
+      <div class="statlbl">Alert Level</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <h3>🔴 Live Threat Feed</h3>
+      <div id="threatFeed"></div>
+    </div>
+    <div class="card">
+      <h3>🌍 Global Attack Heatmap</h3>
+      <div id="mapGrid"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📊 7-Day Threat Analytics</h3>
+    <canvas id="threatChart" height="100"></canvas>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PANEL 6 — AI ASSISTANT
+     ============================================================ -->
+<div class="panel" id="p-ai">
+  <div class="card">
+    <h3>🤖 AI Cybersecurity Assistant
+      <span style="font-size:11px;color:var(--purple3);font-weight:400;margin-left:6px;">
+        Powered by Claude
+      </span>
+    </h3>
+
+    <div id="aiChatBox">
+      <div class="aiMsg">
+        👋 Hello! I'm CyberShield AI. Ask me anything about cybersecurity —
+        phishing, malware, ransomware, passwords, VPNs, firewalls, and more!
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:6px;align-items:center;">
+      <input type="text" id="aiInput"
+             placeholder="Ask: What is a zero-day exploit?"
+             onkeydown="if(event.key==='Enter')doSendAI()"
+             style="margin-top:0;">
+      <button class="btn" style="margin-top:0;white-space:nowrap;" onclick="doSendAI()">Send ↑</button>
+    </div>
+
+    <div class="quickrow">
+      <button class="qbtn" onclick="quickAsk('What is phishing and how can I avoid it?')">Phishing</button>
+      <button class="qbtn" onclick="quickAsk('How do I protect against ransomware?')">Ransomware</button>
+      <button class="qbtn" onclick="quickAsk('What is two-factor authentication and why is it important?')">2FA</button>
+      <button class="qbtn" onclick="quickAsk('What is a VPN and should I use one?')">VPN</button>
+      <button class="qbtn" onclick="quickAsk('What makes a password strong and secure?')">Passwords</button>
+      <button class="qbtn" onclick="quickAsk('What are the different types of malware?')">Malware</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PANEL 7 — CYBER GAME
+     ============================================================ -->
+<div class="panel" id="p-game">
+  <div class="g2">
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div id="gLevel" style="font-size:14px;font-weight:800;color:var(--purple);">Level: —</div>
+        <div id="gameTimer">—</div>
+      </div>
+      <div id="gQuestion" style="font-size:17px;font-weight:700;min-height:56px;line-height:1.6;color:var(--text);">
+        Press Start to begin the quiz!
+      </div>
+      <div class="goptions" id="gOptions"></div>
+      <div style="display:flex;gap:20px;margin-top:14px;font-size:14px;font-weight:600;color:var(--text2);">
+        <span>Score: <strong id="gScore" style="color:var(--purple);">0</strong></span>
+        <span>Streak: <strong id="gStreak" style="color:var(--orange);">0</strong></span>
+        <span>Q: <strong id="gNum" style="color:var(--green);">0</strong>/9</span>
+      </div>
+      <button class="btn" id="gStartBtn" onclick="startGame()" style="margin-top:14px;">▶ Start Game</button>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>🏆 Badges Earned</h3>
+        <div id="gBadges" style="min-height:36px;font-size:13px;color:var(--muted);">
+          Answer questions to earn badges.
+        </div>
+      </div>
+      <div class="card">
+        <h3>📋 Leaderboard</h3>
+        <div id="gBoard" style="font-size:13px;color:var(--muted);">No scores saved yet.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ============================================================
+     JAVASCRIPT — ALL FUNCTIONS
+     ============================================================ -->
+<script>
+
+/* ─── CLOCK ─── */
+function tickClock() {
+  document.getElementById('clock').innerText =
+    new Date().toLocaleTimeString('en-GB', { hour12: false });
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+
+/* ─── TAB SWITCHER ─── */
+function goTab(name, el) {
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('on'); });
+  document.querySelectorAll('.tab').forEach(function(b)   { b.classList.remove('on'); });
+  document.getElementById('p-' + name).classList.add('on');
+  el.classList.add('on');
+  if (name === 'threat') { setTimeout(buildChart, 120); }
+}
+
+
+/* ==============================================================
+   PANEL 1 — LEAK CHECKER
+   ============================================================== */
+function doLeakScan() {
+  var email = document.getElementById('leakEmail').value.trim();
+  if (!email) { alert('Please enter an email address first.'); return; }
+
+  document.getElementById('leakLoader').style.display = 'inline';
+  document.getElementById('leakScore').innerText  = 'Scanning…';
+  document.getElementById('leakReport').innerText = 'Checking breach databases…';
+  document.getElementById('leakAdvice').innerText = '';
+
+  setTimeout(function () {
+    document.getElementById('leakLoader').style.display = 'none';
+
+    var r   = Math.floor(Math.random() * 100);
+    var bar = document.getElementById('leakBar');
+    bar.style.width = r + '%';
+
+    var scoreEl  = document.getElementById('leakScore');
+    var reportEl = document.getElementById('leakReport');
+    var adviceEl = document.getElementById('leakAdvice');
+
+    if (r < 30) {
+      bar.style.background = '#06c96a';
+      scoreEl.innerHTML  = '<span class="cgreen">🟢 LOW RISK — ' + r + ' / 100</span>';
+      reportEl.innerText = 'No major breaches found for this email address.';
+      adviceEl.innerHTML = '✔ Your data appears safe<br>✔ Keep using a strong unique password<br>✔ Enable 2FA on this account';
+    } else if (r < 70) {
+      bar.style.background = '#f59e0b';
+      scoreEl.innerHTML  = '<span class="corange">🟡 MEDIUM RISK — ' + r + ' / 100</span>';
+      reportEl.innerText = 'Email found in 2–3 older data breaches (simulated).';
+      adviceEl.innerHTML = '⚠️ Change passwords on affected accounts<br>⚠️ Never reuse passwords across different sites<br>⚠️ Set up breach-alert notifications';
+    } else {
+      bar.style.background = '#ef4444';
+      scoreEl.innerHTML  = '<span class="cred">🔴 HIGH RISK — ' + r + ' / 100</span>';
+      reportEl.innerText = 'Email found in multiple major breach databases! Act immediately.';
+      adviceEl.innerHTML = '🚨 Change ALL passwords immediately<br>🚨 Enable 2FA on every account<br>🚨 Watch out for phishing emails targeting you<br>🚨 Monitor bank statements for suspicious activity';
+    }
+  }, 2000);
+}
+
+
+/* ==============================================================
+   PANEL 2 — RISK ENGINE
+   ============================================================== */
+function doRiskCheck() {
+  var val = document.getElementById('riskInput').value.trim();
+  if (!val) { alert('Please enter an email, IP address, or username.'); return; }
+
+  var score   = 0;
+  var factors = [];
+
+  if (val.toLowerCase().includes('admin'))                         { score += 40; factors.push('⚠️ Admin keyword detected'); }
+  if (val.toLowerCase().includes('test'))                          { score += 30; factors.push('⚠️ Test account pattern'); }
+  if (val.includes('123'))                                         { score += 20; factors.push('⚠️ Sequential numbers in identifier'); }
+  if (val.includes('http'))                                        { score += 35; factors.push('⚠️ URL pattern in input'); }
+  if (val.toLowerCase().includes('login') || val.toLowerCase().includes('verify')) {
+    score += 30; factors.push('🔴 Login / verify keyword — phishing risk');
+  }
+  if (val.length < 8)                                              { score += 25; factors.push('⚠️ Very short identifier'); }
+  if (val.includes('@'))                                           { score += 10; factors.push('ℹ️ Email address format detected'); }
+  if (/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(val))           { score += 20; factors.push('ℹ️ IP address format detected'); }
+
+  score += Math.floor(Math.random() * 20);
+  if (score > 100) score = 100;
+
+  var bar = document.getElementById('riskBar');
+  bar.style.width = score + '%';
+
+  var statusEl = document.getElementById('riskStatus');
+  var reportEl = document.getElementById('riskReport');
+
+  if (score < 30) {
+    bar.style.background = '#06c96a';
+    statusEl.innerHTML = '<span class="cgreen">🟢 Low Risk</span>';
+    reportEl.innerText = 'No major threats detected. Data appears relatively safe.';
+  } else if (score < 70) {
+    bar.style.background = '#f59e0b';
+    statusEl.innerHTML = '<span class="corange">🟡 Medium Risk</span>';
+    reportEl.innerText = 'Suspicious patterns found. Review your security practices.';
+  } else {
+    bar.style.background = '#ef4444';
+    statusEl.innerHTML = '<span class="cred">🔴 High Risk</span>';
+    reportEl.innerText = 'High risk detected! Possible exposure in breach databases.';
+  }
+
+  var fEl = document.getElementById('riskFactors');
+  if (factors.length) {
+    fEl.innerHTML = factors.map(function (f) {
+      return '<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">' + f + '</div>';
+    }).join('');
+  } else {
+    fEl.innerHTML = '<span style="color:var(--muted);">No specific risk factors found.</span>';
+  }
+}
+
+function clearRisk() {
+  document.getElementById('riskInput').value  = '';
+  document.getElementById('riskBar').style.width = '0%';
+  document.getElementById('riskStatus').innerText = 'Awaiting input…';
+  document.getElementById('riskReport').innerText = '';
+  document.getElementById('riskFactors').innerText = 'No analysis run yet.';
+}
+
+
+/* ==============================================================
+   PANEL 3 — PASSWORD ANALYZER
+   ============================================================== */
+function doPassCheck() {
+  var pw = document.getElementById('pwInput').value;
+
+  var checks = [
+    { label: 'At least 8 characters',         ok: pw.length >= 8 },
+    { label: 'Uppercase letter (A–Z)',         ok: /[A-Z]/.test(pw) },
+    { label: 'Lowercase letter (a–z)',         ok: /[a-z]/.test(pw) },
+    { label: 'Number (0–9)',                   ok: /[0-9]/.test(pw) },
+    { label: 'Special character (!@#$…)',      ok: /[^A-Za-z0-9]/.test(pw) },
+    { label: 'No triple repeated characters',  ok: !(/(.)\1\1/.test(pw)) }
+  ];
+
+  var score = checks.filter(function (c) { return c.ok; }).length;
+  var pct   = Math.round((score / checks.length) * 100);
+
+  var bar  = document.getElementById('pwBar');
+  bar.style.width = pct + '%';
+
+  var labels = ['Very Weak 🔴','Weak 🟠','Fair 🟡','Good 🟢','Strong 💜','Very Strong ✅'];
+  var colors = ['#ef4444','#ef4444','#f59e0b','#06c96a','#7b2fff','#7b2fff'];
+
+  bar.style.background = pw.length ? colors[score] : '#e8e0f5';
+
+  var strengthEl = document.getElementById('pwStrength');
+  strengthEl.innerText = pw.length ? labels[score] : '—';
+  strengthEl.style.color = pw.length ? colors[score] : 'var(--muted)';
+
+  var entropy = pw.length * score * 3;
+  document.getElementById('pwEntropy').innerText =
+    pw.length ? 'Entropy: ~' + Math.min(entropy, 128) + ' bits' : '';
+
+  var crack =
+    entropy < 20  ? 'Seconds' :
+    entropy < 40  ? 'Hours'   :
+    entropy < 70  ? 'Days to Months' :
+    entropy < 100 ? 'Years'   : 'Centuries';
+  document.getElementById('pwCrack').innerText =
+    pw.length ? 'Estimated crack time: ' + crack : '';
+
+  document.getElementById('pwCritList').innerHTML = checks.map(function (c) {
+    return '<li class="' + (c.ok ? 'ok' : 'no') + '">' + c.label + '</li>';
+  }).join('');
+}
+
+var lastGenPw = '';
+function doGenPw() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%^&*';
+  var pw = '';
+  for (var i = 0; i < 16; i++) {
+    pw += chars[Math.floor(Math.random() * chars.length)];
+  }
+  lastGenPw = pw;
+  document.getElementById('genPwBox').innerText = pw;
+}
+
+function copyGenPw() {
+  if (!lastGenPw) { alert('Generate a password first!'); return; }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(lastGenPw).then(function () { alert('✅ Password copied to clipboard!'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = lastGenPw;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('✅ Password copied!');
+  }
+}
+
+function doBreachCheck() {
+  var pw = document.getElementById('pwInput').value;
+  if (!pw) { alert('Type a password in the analyzer above first.'); return; }
+  var msgs = [
+    '⚠️ This password appeared in 3 breach databases. Change it now.',
+    '🔴 High risk: Found in a major credential dump. Do not use this.',
+    '🟡 Caution: Slight exposure detected in older leaked databases.',
+    '✅ Safe: No leaks detected for this password. (Simulated check)'
+  ];
+  var el = document.getElementById('breachResult');
+  el.style.display = 'block';
+  el.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+}
+
+
+/* ==============================================================
+   PANEL 4 — PHISH DETECTOR
+   ============================================================== */
+function doScanURL() {
+  var url = document.getElementById('urlInput').value.trim();
+  if (!url) { alert('Please enter a URL to scan.'); return; }
+
+  var score = 0;
+  var flags = [];
+
+  if (url.toLowerCase().includes('login') || url.toLowerCase().includes('verify'))  { score += 30; flags.push('Login/verify keyword'); }
+  if (url.includes('.xyz') || url.includes('.click') || url.includes('.tk') || url.includes('.pw')) { score += 40; flags.push('Suspicious domain extension'); }
+  if (url.length > 60)                                                              { score += 10; flags.push('Unusually long URL'); }
+  if (url.startsWith('http://') && !url.startsWith('https://'))                    { score += 25; flags.push('Not using HTTPS'); }
+  if ((url.match(/-/g) || []).length > 3)                                           { score += 15; flags.push('Multiple hyphens in domain'); }
+  if (/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url))                             { score += 35; flags.push('IP address used as host'); }
+  if (url.toLowerCase().includes('paypal') || url.toLowerCase().includes('amazon') || url.toLowerCase().includes('apple')) { score += 20; flags.push('Brand name spoofed in URL'); }
+
+  var el = document.getElementById('urlResult');
+  el.style.display = 'block';
+
+  if (score >= 60) {
+    el.innerHTML = '<strong class="cred">🔴 HIGH RISK — Likely Phishing URL</strong><br><small style="color:var(--muted);">Flags: ' + flags.join(' · ') + '</small>';
+    setPhishMeter(90);
+  } else if (score >= 30) {
+    el.innerHTML = '<strong class="corange">🟡 SUSPICIOUS — Proceed With Caution</strong><br><small style="color:var(--muted);">Flags: ' + flags.join(' · ') + '</small>';
+    setPhishMeter(55);
+  } else {
+    el.innerHTML = '<strong class="cgreen">🟢 SAFE — No major threats detected</strong>';
+    setPhishMeter(15);
+  }
+}
+
+function doScanEmail() {
+  var body = document.getElementById('emailBody').value.toLowerCase();
+  if (!body) { alert('Please paste email content first.'); return; }
+
+  var score = 0;
+  var flags = [];
+
+  if (body.includes('password'))                                              { score += 25; flags.push('Password keyword'); }
+  if (body.includes('urgent') || body.includes('immediately') || body.includes('act now')) { score += 25; flags.push('Urgency language'); }
+  if (body.includes('click here') || body.includes('click the link'))        { score += 20; flags.push('Click-bait language'); }
+  if (body.includes('verify') || body.includes('confirm your account'))      { score += 25; flags.push('Account verification request'); }
+  if (body.includes('suspended') || body.includes('locked') || body.includes('disabled')) { score += 20; flags.push('Account threat language'); }
+  if (body.includes('dear customer') || body.includes('dear user') || body.includes('dear member')) { score += 15; flags.push('Generic salutation (not your name)'); }
+  if (body.includes('winner') || body.includes('prize') || body.includes('congratulations')) { score += 30; flags.push('Prize / lottery language'); }
+
+  var el = document.getElementById('emailResult');
+  el.style.display = 'block';
+
+  if (score >= 60) {
+    el.innerHTML = '<strong class="cred">🔴 PHISHING EMAIL DETECTED</strong><br><small style="color:var(--muted);">Flags: ' + flags.join(' · ') + '</small>';
+    setPhishMeter(90);
+  } else if (score >= 30) {
+    el.innerHTML = '<strong class="corange">🟡 SUSPICIOUS EMAIL — Be careful</strong><br><small style="color:var(--muted);">Flags: ' + flags.join(' · ') + '</small>';
+    setPhishMeter(50);
+  } else {
+    el.innerHTML = '<strong class="cgreen">🟢 APPEARS SAFE — Low phishing indicators</strong>';
+    setPhishMeter(15);
+  }
+}
+
+function setPhishMeter(v) {
+  var bar = document.getElementById('phishBar');
+  bar.style.width = v + '%';
+  bar.style.background = v >= 60 ? '#ef4444' : v >= 35 ? '#f59e0b' : '#06c96a';
+  var el = document.getElementById('phishMeter');
+  if      (v >= 60) el.innerHTML = '<span class="cred">Threat Level: HIGH 🔴</span>';
+  else if (v >= 35) el.innerHTML = '<span class="corange">Threat Level: MEDIUM 🟡</span>';
+  else              el.innerHTML = '<span class="cgreen">Threat Level: LOW 🟢</span>';
+}
+
+
+/* ==============================================================
+   PANEL 5 — THREAT FEED
+   ============================================================== */
+var THREATS = [
+  { t:'🔴 Ransomware campaign targeting banking sector',          c:'' },
+  { t:'🔴 Mass phishing wave — 50,000 emails sent in last hour', c:'' },
+  { t:'🔴 Critical CVE-2025-9912 actively exploited in wild',    c:'' },
+  { t:'🟡 Suspicious login attempts from 47 unknown IPs',        c:'warn' },
+  { t:'🟡 DDoS attack on cloud infrastructure — mitigated',      c:'warn' },
+  { t:'🟡 Credential stuffing attempt blocked at login endpoint', c:'warn' },
+  { t:'🟢 Threat intelligence feed updated with new IOCs',        c:'safe' },
+  { t:'🔴 Data breach confirmed — 200k user records exposed',     c:'' },
+  { t:'🟡 Botnet C2 server identified and reported to ISP',      c:'warn' },
+  { t:'🔴 Supply chain attack via malicious npm package',         c:'' },
+];
+
+var feedList = THREATS.slice(0, 5);
+var tCount = 0, bCount = 0;
+
+function renderFeed() {
+  document.getElementById('threatFeed').innerHTML = feedList.map(function (item) {
+    return '<div class="titem ' + item.c + '">' + item.t + '</div>';
+  }).join('');
+}
+
+function tickFeed() {
+  var pick = THREATS[Math.floor(Math.random() * THREATS.length)];
+  var now  = new Date().toLocaleTimeString('en-GB', { hour12: false });
+  feedList.unshift({ t: pick.t + ' [' + now + ']', c: pick.c });
+  if (feedList.length > 7) feedList.pop();
+  tCount++;
+  bCount += Math.floor(Math.random() * 3);
+  document.getElementById('sThreat').innerText  = tCount;
+  document.getElementById('sBlocked').innerText = bCount;
+  renderFeed();
+}
+
+renderFeed();
+setInterval(tickFeed, 3500);
+
+/* Build attack map grid */
+(function () {
+  var grid = document.getElementById('mapGrid');
+  for (var i = 0; i < 120; i++) {
+    var c = document.createElement('div');
+    c.className = 'mcell';
+    grid.appendChild(c);
+  }
+})();
+
+function animateMap() {
+  var cells = document.querySelectorAll('.mcell');
+  cells.forEach(function (c) { c.classList.remove('hot', 'warm'); });
+  for (var i = 0; i < 14; i++) {
+    var r = Math.floor(Math.random() * cells.length);
+    cells[r].classList.add(Math.random() > 0.5 ? 'hot' : 'warm');
+  }
+}
+setInterval(animateMap, 900);
+
+/* Chart — built on demand to avoid sizing issues */
+var chartBuilt = false;
+function buildChart() {
+  if (chartBuilt) return;
+  chartBuilt = true;
+  var ctx = document.getElementById('threatChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [
+        {
+          label: 'Threats Detected',
+          data: [42, 58, 67, 45, 89, 104, 91],
+          borderColor: '#7b2fff',
+          backgroundColor: 'rgba(123,47,255,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#7b2fff',
+          pointRadius: 5
+        },
+        {
+          label: 'Threats Blocked',
+          data: [38, 51, 60, 40, 80, 98, 87],
+          borderColor: '#06c96a',
+          backgroundColor: 'rgba(6,201,106,0.06)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#06c96a',
+          pointRadius: 5
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { ticks: { color: '#9b7cc0' }, grid: { color: 'rgba(123,47,255,0.07)' } },
+        y: { ticks: { color: '#9b7cc0' }, grid: { color: 'rgba(123,47,255,0.07)' } }
+      },
+      plugins: {
+        legend: { labels: { color: '#1e0a3c', font: { weight: '700' } } }
+      }
+    }
+  });
+}
+
+
+/* ==============================================================
+   PANEL 6 — AI ASSISTANT (Claude API)
+   ============================================================== */
+var aiHistory = [];
+
+async function doSendAI() {
+  var inputEl = document.getElementById('aiInput');
+  var msg     = inputEl.value.trim();
+  if (!msg) return;
+  inputEl.value = '';
+
+  addChatMsg('You', msg, 'myMsg');
+  addChatMsg('AI', '<span class="typing">● thinking…</span>', 'aiMsg');
+  aiHistory.push({ role: 'user', content: msg });
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: 'You are CyberShield AI, a friendly expert cybersecurity assistant built into a purple-themed security dashboard. Give clear, accurate, helpful answers about cybersecurity topics: phishing, malware, ransomware, passwords, VPNs, firewalls, encryption, social engineering, incident response. Keep answers under 120 words. Use simple language anyone can understand.',
+        messages: aiHistory
+      })
+    });
+
+    var data  = await res.json();
+    var reply = '';
+    if (data.content && data.content.length > 0) {
+      data.content.forEach(function (block) {
+        if (block.type === 'text') reply += block.text;
+      });
+    }
+    if (!reply) reply = 'Sorry, I could not get a response. Please try again.';
+
+    aiHistory.push({ role: 'assistant', content: reply });
+    removeTyping();
+    addChatMsg('AI', reply, 'aiMsg');
+
+  } catch (e) {
+    removeTyping();
+    addChatMsg('AI', '⚠️ Could not connect to AI. Check your internet connection and try again.', 'aiMsg');
+  }
+}
+
+function quickAsk(q) {
+  document.getElementById('aiInput').value = q;
+  doSendAI();
+}
+
+function addChatMsg(who, text, cls) {
+  var box = document.getElementById('aiChatBox');
+  var d   = document.createElement('div');
+  d.className   = cls;
+  d.innerHTML   = '<strong>' + who + ':</strong> ' + text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function removeTyping() {
+  var box   = document.getElementById('aiChatBox');
+  var items = box.querySelectorAll('.typing');
+  items.forEach(function (s) { s.parentElement.remove(); });
+}
+
+
+/* ==============================================================
+   PANEL 7 — CYBER GAME
+   ============================================================== */
+var QUESTIONS = [
+  { q:'What is phishing?',
+    opts:['A type of antivirus','Tricking someone into revealing sensitive data','A network cable','A firewall feature'],
+    ans:1, level:'Beginner' },
+  { q:'Which is the strongest password?',
+    opts:['123456','password','R@nd0m#91X!','qwerty123'],
+    ans:2, level:'Beginner' },
+  { q:'What does a VPN primarily do?',
+    opts:['Deletes viruses','Hides your IP and encrypts traffic','Boosts RAM','Fixes WiFi'],
+    ans:1, level:'Beginner' },
+  { q:'A computer worm is best described as…',
+    opts:['A hardware part','Self-replicating malware','A web browser','A file format'],
+    ans:1, level:'Intermediate' },
+  { q:'What does a firewall mainly do?',
+    opts:['Speed up games','Block unauthorised network traffic','Charge devices','Edit files'],
+    ans:1, level:'Intermediate' },
+  { q:'Why is HTTPS more secure than HTTP?',
+    opts:["It's faster","It encrypts data in transit","It blocks all viruses","It's newer"],
+    ans:1, level:'Intermediate' },
+  { q:'Is it safe to enter passwords on public WiFi without a VPN?',
+    opts:['Yes, WiFi is always safe','No — traffic can be intercepted'],
+    ans:1, level:'Expert' },
+  { q:'Should you share your OTP with anyone?',
+    opts:['Yes, with support staff','No — never share OTPs with anyone'],
+    ans:1, level:'Expert' },
+  { q:'Downloading apps from unknown sources is…',
+    opts:['Generally safe','A serious security risk — use official stores'],
+    ans:1, level:'Expert' },
+];
+
+var gScore  = 0;
+var gStreak = 0;
+var gIdx    = 0;
+var gTimer  = null;
+var gTime   = 15;
+var gActive = false;
+
+function startGame() {
+  gScore = 0; gStreak = 0; gIdx = 0; gActive = true;
+  document.getElementById('gStartBtn').style.display = 'none';
+  document.getElementById('gScore').innerText  = 0;
+  document.getElementById('gStreak').innerText = 0;
+  document.getElementById('gNum').innerText    = 0;
+  document.getElementById('gBadges').innerHTML =
+    '<span style="color:var(--muted);">Answer questions to earn badges…</span>';
+  loadQ();
+  showBoard();
+}
+
+function loadQ() {
+  if (gIdx >= QUESTIONS.length) { endGame(); return; }
+
+  var q = QUESTIONS[gIdx];
+  document.getElementById('gLevel').innerText    = 'Level: ' + q.level;
+  document.getElementById('gQuestion').innerText = q.q;
+  document.getElementById('gNum').innerText      = gIdx + 1;
+
+  var html = '';
+  q.opts.forEach(function (opt, i) {
+    html += '<button class="gbtn" id="go' + i + '" onclick="doAnswer(' + i + ')">' + opt + '</button>';
+  });
+  document.getElementById('gOptions').innerHTML = html;
+
+  clearInterval(gTimer);
+  gTime = 15;
+  document.getElementById('gameTimer').innerText = gTime;
+
+  gTimer = setInterval(function () {
+    gTime--;
+    document.getElementById('gameTimer').innerText = gTime;
+    if (gTime <= 0) {
+      clearInterval(gTimer);
+      var cBtn = document.getElementById('go' + QUESTIONS[gIdx].ans);
+      if (cBtn) cBtn.classList.add('correct');
+      disableOpts();
+      setTimeout(function () { gIdx++; loadQ(); }, 1100);
+    }
+  }, 1000);
+}
+
+function doAnswer(i) {
+  if (!gActive) return;
+  clearInterval(gTimer);
+  disableOpts();
+
+  var q       = QUESTIONS[gIdx];
+  var chosen  = document.getElementById('go' + i);
+  var correct = document.getElementById('go' + q.ans);
+
+  if (i === q.ans) {
+    chosen.classList.add('correct');
+    gScore  += 10;
+    gStreak += 1;
+    if (gStreak % 3 === 0) gScore += 10; // combo bonus
+  } else {
+    chosen.classList.add('wrong');
+    correct.classList.add('correct');
+    gStreak = 0;
+  }
+
+  document.getElementById('gScore').innerText  = gScore;
+  document.getElementById('gStreak').innerText = gStreak;
+  updateBadges();
+
+  setTimeout(function () { gIdx++; loadQ(); }, 1300);
+}
+
+function disableOpts() {
+  document.querySelectorAll('.gbtn').forEach(function (b) {
+    b.onclick  = null;
+    b.disabled = true;
+  });
+}
+
+function endGame() {
+  clearInterval(gTimer);
+  gActive = false;
+  document.getElementById('gQuestion').innerText = '🎮 Game Over!  Final Score: ' + gScore;
+  document.getElementById('gOptions').innerHTML  = '';
+  document.getElementById('gameTimer').innerText = '—';
+  document.getElementById('gLevel').innerText    = 'Well done!';
+
+  var btn = document.getElementById('gStartBtn');
+  btn.innerText          = '▶ Play Again';
+  btn.style.display      = 'inline-block';
+
+  var name  = prompt('Enter your name for the leaderboard:') || 'Anonymous';
+  var board = JSON.parse(localStorage.getItem('csboard') || '[]');
+  board.push({ name: name, score: gScore });
+  board.sort(function (a, b) { return b.score - a.score; });
+  board = board.slice(0, 5);
+  localStorage.setItem('csboard', JSON.stringify(board));
+  showBoard();
+}
+
+function updateBadges() {
+  var badges = [];
+  if (gScore  >= 30) badges.push('<span class="bdg bdg-g">🛡️ Beginner Shield</span>');
+  if (gScore  >= 60) badges.push('<span class="bdg bdg-b">🔐 Security Guard</span>');
+  if (gScore  >= 90) badges.push('<span class="bdg bdg-o">🕵️ Cyber Detective</span>');
+  if (gStreak >= 3)  badges.push('<span class="bdg bdg-r">🔥 Combo Master ×' + gStreak + '</span>');
+  if (gScore >= 110) badges.push('<span class="bdg bdg-p">👑 CyberShield Champion</span>');
+  document.getElementById('gBadges').innerHTML = badges.length
+    ? badges.join('')
+    : '<span style="color:var(--muted);">Answer questions to earn badges…</span>';
+}
+
+function showBoard() {
+  var board  = JSON.parse(localStorage.getItem('csboard') || '[]');
+  var medals = ['🥇','🥈','🥉','4.','5.'];
+  document.getElementById('gBoard').innerHTML = board.length
+    ? board.map(function (b, i) {
+        return '<div class="lbrow"><span>' + medals[i] + ' ' + b.name + '</span><span class="cpurple" style="font-weight:800;">' + b.score + ' pts</span></div>';
+      }).join('')
+    : '<span style="color:var(--muted);">No scores saved yet. Play to get on the board!</span>';
+}
+
+showBoard();
+
+</script>
+</body>
+</html>
